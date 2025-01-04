@@ -4,6 +4,7 @@ import logging
 import sys
 import pymongo
 import boto3
+from datetime import datetime
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -61,7 +62,8 @@ def export_mongo_to_s3():
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY
     )
 
-    key_name = "openfoodfacts_export.json"
+    key_name = f"openfoodfacts_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+
     s3_client.put_object(
         Bucket=S3_BUCKET,
         Key=key_name,
