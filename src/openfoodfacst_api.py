@@ -1,15 +1,3 @@
-"""
-Fetches products for multiple search terms from the Open Food Facts API
-and inserts them into MongoDB Atlas (nutri_db.open_food_facts by default).
-
-Environment variables used:
-  MONGO_URI      - MongoDB connection string (required)
-  DB_NAME        - Name of the database (default: "nutri_db")
-  COLLECTION_NAME- Name of the collection (default: "open_food_facts")
-  PAGE_SIZE      - How many products to fetch per page (default: 50)
-  TOTAL_PAGES_PER_SEARCH - How many pages to fetch for each search term (default: 2)
-"""
-
 import os
 import sys
 import time
@@ -22,11 +10,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
-DB_NAME = os.getenv("DB_NAME", "nutri_db")
-COLLECTION_NAME = os.getenv("COLLECTION_NAME", "open_food_facts")
+DB_NAME = os.getenv("DB_NAME")
+COLLECTION_NAME = os.getenv("COLLECTION_NAME")
 
-PAGE_SIZE = int(os.getenv("PAGE_SIZE", 50))
-TOTAL_PAGES_PER_SEARCH = int(os.getenv("TOTAL_PAGES_PER_SEARCH", 2))
+PAGE_SIZE = 50 # How many products to fetch per page
+TOTAL_PAGES_PER_SEARCH = 2 # How many pages to fetch for each search term
 
 search_terms = [
     "chips",
