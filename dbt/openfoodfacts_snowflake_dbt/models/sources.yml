@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: RAW
+    database: "{{ env_var('SNOWFLAKE_DATABASE_NAME') }}"
+    schema: "RAW"
+    tables:
+      - name: RAW_OPENFOODFACTS
+        identifier: RAW_OPENFOODFACTS

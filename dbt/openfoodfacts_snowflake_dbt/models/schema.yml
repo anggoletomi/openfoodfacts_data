@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: fact_nutrition
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: ['product_code']
+
+    columns:
+      - name: product_code
+        tests:
+          - not_null
+          - relationships:
+              to: dim_product
+              field: product_code
+
+      - name: sugars_100g
+        tests:
+          - not_null
