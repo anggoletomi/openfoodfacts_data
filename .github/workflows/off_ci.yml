@@ -1,0 +1,56 @@
+name: Open Food Facts CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: "1 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+
+    env:
+      SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+      SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+      SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+      SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+      SNOWFLAKE_WAREHOUSE_NAME: ${{ secrets.SNOWFLAKE_WAREHOUSE_NAME }}
+      SNOWFLAKE_DATABASE_NAME: ${{ secrets.SNOWFLAKE_DATABASE_NAME }}
+      SNOWFLAKE_SCHEMA_NAME: ${{ secrets.SNOWFLAKE_SCHEMA_NAME }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      - name: Install Python dependencies
+        run: |
+          pip install -r requirements.txt
+          # If needed: pip install dbt-snowflake, python-dotenv, etc.
+      
+      - name: Install dbt packages (deps)
+        run: |
+          cd dbt/openfoodfacts_snowflake_dbt
+          dbt deps
+          cd ../../
+
+      - name: Run scripts
+        run: |
+          python src/openfoodfacts_api.py
+          python src/export_to_s3.py
+          python src/setup_snowflake.py
+
+      - name: Run dbt
+        run: |
+          python src/run_dbt.py
