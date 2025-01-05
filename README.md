@@ -1,6 +1,7 @@
 # OpenFoodFacts Data Pipeline
 
-This repository demonstrates a **data engineering project** showcasing various tools. The pipeline ingests data from the [Open Food Facts API](https://world.openfoodfacts.org/data).
+This repository demonstrates a **data engineering project** showcasing various tools. The pipeline ingests data from the 
+<a href="https://world.openfoodfacts.org/data" target="_blank" rel="noopener noreferrer">Open Food Facts API</a>.
 
 ## Table of Contents
 1. [Tech Stack & Workflow](#tech-stack--workflow)
@@ -127,4 +128,6 @@ We use a **Docker-based** Metabase instance. The typical steps to get Metabase u
 <br/><br/>
 
 > **Author**: _anggoletomi_  
-> **Contact**: [LinkedIn](https://www.linkedin.com/in/anggoletomi/) / [GitHub](https://github.com/anggoletomi)  
+> **Contact**: 
+> <a href="https://www.linkedin.com/in/anggoletomi/" target="_blank" rel="noopener noreferrer">LinkedIn</a> / 
+> <a href="https://github.com/anggoletomi" target="_blank" rel="noopener noreferrer">GitHub</a>
