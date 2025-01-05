@@ -23,7 +23,10 @@ jobs:
       SNOWFLAKE_SCHEMA_NAME: ${{ secrets.SNOWFLAKE_SCHEMA_NAME }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      MONGO_DB_NAME: ${{ secrets.MONGO_DB_NAME }}
+      MONGO_COLLECTION_NAME: ${{ secrets.MONGO_COLLECTION_NAME }}
 
     steps:
       - name: Check out code

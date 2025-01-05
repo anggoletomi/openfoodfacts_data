@@ -25,7 +25,7 @@ SNOWFLAKE_SCHEMA_NAME      = os.getenv("SNOWFLAKE_SCHEMA_NAME")
 
 AWS_ACCESS_KEY_ID          = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY      = os.getenv("AWS_SECRET_ACCESS_KEY")
-S3_BUCKET                  = os.getenv("S3_BUCKET")
+AWS_S3_BUCKET              = os.getenv("AWS_S3_BUCKET")
 
 STAGE_NAME                 = "STAGE_OPENFOODFACTS"
 TABLE_NAME                 = "RAW_OPENFOODFACTS"
@@ -48,7 +48,7 @@ def main():
     if not SNOWFLAKE_ACCOUNT or not SNOWFLAKE_USER or not SNOWFLAKE_PASSWORD:
         logging.error("Missing Snowflake credentials. Check environment variables.")
         sys.exit(1)
-    if not AWS_ACCESS_KEY_ID or not AWS_SECRET_ACCESS_KEY or not S3_BUCKET:
+    if not AWS_ACCESS_KEY_ID or not AWS_SECRET_ACCESS_KEY or not AWS_S3_BUCKET:
         logging.error("Missing S3 credentials or bucket name. Check environment variables.")
         sys.exit(1)
 
@@ -93,7 +93,7 @@ def main():
         # 6) Create stage if not exists
         run_query(conn, f"""
             CREATE STAGE IF NOT EXISTS {STAGE_NAME}
-            URL = 's3://{S3_BUCKET}/'
+            URL = 's3://{AWS_S3_BUCKET}/'
             CREDENTIALS = (
                 aws_key_id='{AWS_ACCESS_KEY_ID}',
                 aws_secret_key='{AWS_SECRET_ACCESS_KEY}'

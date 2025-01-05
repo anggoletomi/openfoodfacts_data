@@ -17,7 +17,7 @@ COLLECTION_NAME = os.getenv("COLLECTION_NAME")
 # AWS config
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-S3_BUCKET = os.getenv("S3_BUCKET")
+AWS_S3_BUCKET = os.getenv("AWS_S3_BUCKET")
 
 # Logging setup: INFO level + timestamps
 logging.basicConfig(
@@ -34,7 +34,7 @@ def export_mongo_to_s3():
     # 1) Basic validation checks
     if not MONGO_URI:
         raise ValueError("MONGO_URI is not set. Cannot connect to MongoDB.")
-    if not AWS_ACCESS_KEY_ID or not AWS_SECRET_ACCESS_KEY or not S3_BUCKET:
+    if not AWS_ACCESS_KEY_ID or not AWS_SECRET_ACCESS_KEY or not AWS_S3_BUCKET:
         raise ValueError("AWS credentials or S3 bucket name not provided.")
 
     # 2) Connect to MongoDB
@@ -65,12 +65,12 @@ def export_mongo_to_s3():
     key_name = f"openfoodfacts_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
 
     s3_client.put_object(
-        Bucket=S3_BUCKET,
+        Bucket=AWS_S3_BUCKET,
         Key=key_name,
         Body=json_data.encode("utf-8")
     )
 
-    logging.info("Exported %d documents to s3://%s/%s", doc_count, S3_BUCKET, key_name)
+    logging.info("Exported %d documents to s3://%s/%s", doc_count, AWS_S3_BUCKET, key_name)
 
     client.close()
 
