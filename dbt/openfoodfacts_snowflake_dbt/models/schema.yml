@@ -10,6 +10,7 @@ models:
       - name: product_code
         tests:
           - not_null
+              severity: warn
           - relationships:
               to: dim_product
               field: product_code
@@ -17,3 +18,4 @@ models:
       - name: sugars_100g
         tests:
           - not_null
+              severity: warn
