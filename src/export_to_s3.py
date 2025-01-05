@@ -11,8 +11,8 @@ load_dotenv()
 
 # MongoDB config
 MONGO_URI = os.getenv("MONGO_URI")
-DB_NAME = os.getenv("DB_NAME")
-COLLECTION_NAME = os.getenv("COLLECTION_NAME")
+MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
+MONGO_COLLECTION_NAME = os.getenv("MONGO_COLLECTION_NAME")
 
 # AWS config
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
@@ -40,11 +40,11 @@ def export_mongo_to_s3():
     # 2) Connect to MongoDB
     logging.info("Connecting to MongoDB...")
     client = pymongo.MongoClient(MONGO_URI)
-    db = client[DB_NAME]
-    coll = db[COLLECTION_NAME]
+    db = client[MONGO_DB_NAME]
+    coll = db[MONGO_COLLECTION_NAME]
 
     # 3) Fetch all docs
-    logging.info("Fetching documents from %s.%s", DB_NAME, COLLECTION_NAME)
+    logging.info("Fetching documents from %s.%s", MONGO_DB_NAME, MONGO_COLLECTION_NAME)
     cursor = coll.find({})
     data_list = list(cursor)
     doc_count = len(data_list)
