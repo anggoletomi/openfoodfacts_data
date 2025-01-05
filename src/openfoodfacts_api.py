@@ -10,8 +10,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
-DB_NAME = os.getenv("DB_NAME")
-COLLECTION_NAME = os.getenv("COLLECTION_NAME")
+MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
+MONGO_COLLECTION_NAME = os.getenv("MONGO_COLLECTION_NAME")
 
 PAGE_SIZE = 50 # How many products to fetch per page
 TOTAL_PAGES_PER_SEARCH = 2 # How many pages to fetch for each search term
@@ -85,8 +85,8 @@ def insert_or_update_mongo(products):
         return
 
     client = pymongo.MongoClient(MONGO_URI)
-    db = client[DB_NAME]
-    coll = db[COLLECTION_NAME]
+    db = client[MONGO_DB_NAME]
+    coll = db[MONGO_COLLECTION_NAME]
 
     operations = []
     for prod in products:
@@ -128,7 +128,7 @@ def main():
     """
     logging.info("Starting ingestion with search_terms=%s", search_terms)
     logging.info("Using DB=%s, Collection=%s, PAGE_SIZE=%d, TOTAL_PAGES_PER_SEARCH=%d",
-                 DB_NAME, COLLECTION_NAME, PAGE_SIZE, TOTAL_PAGES_PER_SEARCH)
+                 MONGO_DB_NAME, MONGO_COLLECTION_NAME, PAGE_SIZE, TOTAL_PAGES_PER_SEARCH)
 
     total_inserted_global = 0
 
