@@ -39,7 +39,7 @@ logging.basicConfig(
 if not MONGO_URI:
     raise ValueError("MONGO_URI environment variable is not set. Cannot connect to MongoDB.")
 
-def fetch_products(search_term, page=1, page_size=50, max_retries=3):
+def fetch_products(search_term, page=1, page_size=50, max_retries=5):
     """
     Fetch a single page of products from the Open Food Facts API for a given search_term.
     Implements a simple retry (max_retries) if requests fail.
@@ -58,7 +58,7 @@ def fetch_products(search_term, page=1, page_size=50, max_retries=3):
     attempt = 0
     while True:
         try:
-            resp = requests.get(url, params=params, timeout=20)
+            resp = requests.get(url, params=params, timeout=60)
             resp.raise_for_status()
             data = resp.json()
             return data.get("products", [])
@@ -139,11 +139,16 @@ def main():
         for page in range(1, TOTAL_PAGES_PER_SEARCH + 1):
             logging.info("Fetching page %d/%d for term '%s'", page, TOTAL_PAGES_PER_SEARCH, term)
 
-            products = fetch_products(term, page=page, page_size=PAGE_SIZE)
+            try:
+                products = fetch_products(term, page=page, page_size=PAGE_SIZE)
+            except requests.exceptions.ReadTimeout as e:
+                logging.error("Timeout on term='%s', page=%d, error=%s. Skipping this page...", term, page, e)
+                continue
+
             if not products:
                 logging.info("No products returned for '%s' at page %d. Stopping early for this term.",
-                             term, page)
-                break
+                            term, page)
+                continue
 
             insert_or_update_mongo(products)
             total_inserted_this_term += len(products)
